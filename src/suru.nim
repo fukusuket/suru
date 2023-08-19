@@ -269,18 +269,6 @@ when compileOption("threads"):
       bar: SuruBar(bars: initSingleSuruBar(25).repeat(bars)),
     )
 
-  proc setup*(sbc: ptr SuruBarController, iterableLengths: varargs[int]) =
-    sbc[].bar.setup()
-
-    proc progressThread(sbc: ptr SuruBarController) {.thread.} =
-      while not sbc.finished:
-        sleep 50
-        sbc[].bar.update()
-      # finished now
-      sbc[].bar.finish()
-
-    createThread(sbc[].progressThread, progressThread, sbc)
-
   template update*(sbc: ptr SuruBarController, delay: int = 0, index: int = 0) =
     discard
 
@@ -414,4 +402,3 @@ macro suru*(forLoop: ForLoopStmt): untyped =
       `preLoop`
       `newFor`
       `postLoop`
-
